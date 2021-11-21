@@ -56,3 +56,58 @@ Os tópicos gerados pelo modelo foram:
 * **Tópico 5**: Aorta torácica e traquéia, ambas com aspectos preservados.
 
 **Conclusão**: Mesmo com modelo conseguir identificar tópicos por órgãos e o aspectos deles, não sei se seria útil para alguma aplicação, porque ele separa tudo de maneira muito genérica e dificilmente consegue identificar de fato um diagnóstico.
+
+### 2.  Feature Engineering
+
+Essa abordagem é mais exploratória e seu objetivo principal é tentar extrair informações de dados brutos para que seja possível pelo menos criar alguns rótulos e treinar um modelo de classificação.
+
+Algumas perguntas que essa abordagem tenta responder são:
+1.  **Existe em alguma parte do texto que é dado o diagnóstico do laudo?**
+2.  **Existe alguma frase padrão que indica que os exames não apresentam nada anormal?**
+3.  **É possível rotular os dados com as informações apresentadas nos laudos?**
+
+Primeiramente, o texto é pré-processado para que seja mais fácil identificar alguns padrões.  Depois foi identificado que no texto existem "**campos**" onde logo após sua ocorrência o diagnóstico é descrito. Esses campos são:
+
+* opinião diagnóstica
+* impressão diagnóstica
+* hipóteses diagnósticas
+* diagnósticos diferenciais
+* possibilidades diagnósticas
+* sugere o diagnóstico de
+
+**Exemplo:**
+![enter image description here](https://i.imgur.com/mRLIBfP.jpg)
+
+Após o "**campo**" **opnião diagnóstica** temos o possível diagnóstico. Apenas **1140** laudos possuem esse **campo** no seu texto.  Usando regex o possível diagnóstico é extraído. Porém, mesmo com a extração desse campo, não temos um padrão seguido por quem escreveu, então o diagnóstico de pneumonia intersticial pode ser descrito de várias maneiras, impossibilitando o uso dele como rótulo. Felizmente, agora com o possível diagnóstico mais filtrado é possível identificar novos padrões. Explorando o dado, foi encontrado algumas frases importantes.
+
+#### Frases de diagnósticos  **normais**:
+
+-   ausência de lesões traumáticas do parênquima pulmonar ao presente método de estudo
+-   estudo radiográfico do tórax sem alterações significativas
+-   aspecto radiológico normal do tórax
+-   estudo tomográfico do tórax dentro dos padrões da normalidade
+-   ausência de lesões traumáticas
+
+#### Frases de diagnósticos que indicam alguma  **patologia**:
+
+-   pneumopatia inflamatória lesões fibroatelectásicas no ápice do pulmão esquerdo
+-   tromboembolismo pulmonar agudo bilateral
+
+Alguns laudos podem apresentar  **mais de uma**  patologia como possível diagnóstico.
+É mais fácil rotular o dado que apresenta diagnósticos **normais** porque seu texto é mais "comportado".  Então, verificando se no texto existem as frases que indicam normalidade, o dado é rotulado como NORMAL e o restante como PATOLOGIA. No final o conjunto de dados fica assim:
+
+![enter image description here](https://i.imgur.com/R3vg6Kz.png)
+
+Esse dado é apenas os 1140 laudos que possuem o campo de diagnósticos. Então vamos usar ele para treinar um modelo e inferir sobre o restante do dado. Os modelos utilizados para classificar foram:
+#### **Naive Bayes**
+![enter image description here](https://i.imgur.com/puAXjkV.png)
+
+#### **SGDClassifier**
+
+![enter image description here](https://i.imgur.com/ZQipGF1.png)
+
+Não precisou testar muitos modelos, pois os primeiros já deram resultados bastante bons. É possível verificar que eles conseguiram entender de acordo com o dado passou os exames que podem ser NORMAIS ou que podem possuir alguma PATOLOGIA.
+
+**Conclusão**: Mesmo usando os campos do próprio texto, o dado ainda é feito de maneira sintética. Caso existe um rótulo real para esses laudos, seria interessante fazer uma validação e verificar se de fato o modelo conseguiu identificar resultados normais de patológicos.
+
+### 3.  Extração de Entidades Nomeadas usando BioBERTpt
