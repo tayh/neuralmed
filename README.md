@@ -111,3 +111,24 @@ Não precisou testar muitos modelos, pois os primeiros já deram resultados bast
 **Conclusão**: Mesmo usando os campos do próprio texto, o dado ainda é feito de maneira sintética. Caso existe um rótulo real para esses laudos, seria interessante fazer uma validação e verificar se de fato o modelo conseguiu identificar resultados normais de patológicos.
 
 ### 3.  Extração de Entidades Nomeadas usando BioBERTpt
+O BioBERTpt - Portuguese Clinical and Biomedical BERT é um modelo baseado no BERT para língua portuguesa e treinado em notas clínicas e literatura biomédica.
+
+Link: https://huggingface.co/pucpr
+
+O objeitvo desse notebook é extrair entidades que possam auxiliar na separação de diagnósticos dos laudos de exames radiológicos. Foram usados 5 modelos pré-treinados do BioBERTpt: Diagnostic, Disease, Sign, Disorder e Finding.
+
+O algoritmo executa os seguintes passos:
+
+    1. Itera sobre cada modelo (são modelos carregados separadamente)
+    2. Codifica o texto de acordo com BioBERTpt
+    3. Gera os input_ids de cada palavra dos textos codificados
+    4. Gera a label (Entidade) para cada input_id 
+    5. Mapeia a label para cada palavra (Ex: 'enfisema': 'B-Disorder') de acordo com o nome dado pelo modelo
+    6. Monta um Dataframe indicando o Diagnostic, Disease, Sign, Disorder e Finding para cada laudo do conjunto de dados
+   
+O resultado final da extração:
+
+![enter image description here](https://i.imgur.com/h5Mq472.png)
+
+   **Conclusão**: De fato o uso do modelo pré-treinado conseguiu identificar bem mais os diagnósticos do que o modelo LDA, como por exemplo no documento com o docid **375232**, foi identificado a entidade Disorder para as palavras '**alterações, crônicas, de, processo, granulomatoso, sinais, sequelas, derrames, pleurais, lesões, massas, alterações, crônicas, de, processo, granulomatoso, sinais, sequelas, hepatopatia**' para um sistema que pode utilizar essas palavras para fazer triagem já é um grande começo. Porém, ele ainda tem dificuldade de encontrar entidades do tipo Sign e Disease. A entidade Disorder também não aparece em alguns documentos e em alguns as palavras extraídas não são muito significantes como por exemplo a palavra: **massa**. O potencial pra esse tipo de abordagem é promissora, com um dado anotado seria possível fazer um novo modelo que se especializa em textos radiológicos e consequentemente vai melhorar bastante a extração das entidades.
+   
