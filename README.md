@@ -96,7 +96,7 @@ Após o "**campo**" **opnião diagnóstica** temos o possível diagnóstico. Ape
 Alguns laudos podem apresentar  **mais de uma**  patologia como possível diagnóstico.
 É mais fácil rotular o dado que apresenta diagnósticos **normais** porque seu texto é mais "comportado".  Então, verificando se no texto existem as frases que indicam normalidade, o dado é rotulado como NORMAL e o restante como PATOLOGIA. No final o conjunto de dados fica assim:
 
-![enter image description here](https://i.imgur.com/R3vg6Kz.png)
+![enter image description here](https://i.imgur.com/aCCNYYh.png)
 
 Esse dado é apenas os 1140 laudos que possuem o campo de diagnósticos. Então vamos usar ele para treinar um modelo e inferir sobre o restante do dado. Os modelos utilizados para classificar foram:
 #### **Naive Bayes**
@@ -131,4 +131,10 @@ O resultado final da extração:
 ![enter image description here](https://i.imgur.com/h5Mq472.png)
 
    **Conclusão**: De fato o uso do modelo pré-treinado conseguiu identificar bem mais os diagnósticos do que o modelo LDA, como por exemplo no documento com o docid **375232**, foi identificado a entidade Disorder para as palavras '**alterações, crônicas, de, processo, granulomatoso, sinais, sequelas, derrames, pleurais, lesões, massas, alterações, crônicas, de, processo, granulomatoso, sinais, sequelas, hepatopatia**' para um sistema que pode utilizar essas palavras para fazer triagem já é um grande começo. Porém, ele ainda tem dificuldade de encontrar entidades do tipo Sign e Disease. A entidade Disorder também não aparece em alguns documentos e em alguns as palavras extraídas não são muito significantes como por exemplo a palavra: **massa**. O potencial pra esse tipo de abordagem é promissora, com um dado anotado seria possível fazer um novo modelo que se especializa em textos radiológicos e consequentemente vai melhorar bastante a extração das entidades.
-   
+
+### 4. Masked language modeling (MLM) para textos radiológicos
+Esse modelo é só uma coisa **extra**, porque queria verificar como funcionaria se eu treinasse um modelo para entender representações de textos radiológicos. As métricas dele foram:
+
+![enter image description here](https://i.imgur.com/CfEp0vX.png)
+
+Dá pra melhorar bastante, ele ainda não pareceu performar com toda capacidade, mas é preciso de uma máquina melhor porque ele consome muitos recursos.
