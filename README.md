@@ -78,7 +78,7 @@ Primeiramente, o texto é pré-processado para que seja mais fácil identificar 
 **Exemplo:**
 ![enter image description here](https://i.imgur.com/mRLIBfP.jpg)
 
-Após o "**campo**" **opnião diagnóstica** temos o possível diagnóstico. Apenas **1140** laudos possuem esse **campo** no seu texto.  Usando regex o possível diagnóstico é extraído. Porém, mesmo com a extração desse campo, não temos um padrão seguido por quem escreveu, então o diagnóstico de pneumonia intersticial pode ser descrito de várias maneiras, impossibilitando o uso dele como rótulo. Felizmente, agora com o possível diagnóstico mais filtrado é possível identificar novos padrões. Explorando o dado, foi encontrado algumas frases importantes.
+Após o "**campo**" **opnião diagnóstica** temos o possível diagnóstico. Apenas **1140** laudos possuem esse **campo** no seu texto.  Usando regex o possível diagnóstico é extraído. Porém, mesmo com a extração desse campo, não temos um padrão seguido por quem escreveu, então o diagnóstico de pneumonia intersticial pode ser descrito de várias maneiras, impossibilitando o uso dele como rótulo. Felizmente, agora com o possível diagnóstico mais filtrado, é possível identificar novos padrões. Explorando o dado, foi encontrado algumas frases importantes.
 
 #### Frases de diagnósticos  **normais**:
 
@@ -94,7 +94,7 @@ Após o "**campo**" **opnião diagnóstica** temos o possível diagnóstico. Ape
 -   tromboembolismo pulmonar agudo bilateral
 
 Alguns laudos podem apresentar  **mais de uma**  patologia como possível diagnóstico.
-É mais fácil rotular o dado que apresenta diagnósticos **normais** porque seu texto é mais "comportado".  Então, verificando se no texto existem as frases que indicam normalidade, o dado é rotulado como NORMAL e o restante como PATOLOGIA. No final o conjunto de dados fica assim:
+É mais fácil rotular o dado que apresenta diagnósticos **normais**, porque seu texto é mais "comportado".  Então, verificando se no texto se existem frases que indicam normalidade, o dado é rotulado como NORMAL e o restante como PATOLOGIA. No final o conjunto de dados fica assim:
 
 ![enter image description here](https://i.imgur.com/aCCNYYh.png)
 
